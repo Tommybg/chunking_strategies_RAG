@@ -1,7 +1,9 @@
+# Configuración para Cloudflare Pages con Next.js
+# Documentación 2026: https://developers.cloudflare.com/pages/framework-guides/nextjs/
+
 name = "chunking-strats-in-action"
 compatibility_date = "2024-04-03"
-compatibility_flags = [ "nodejs_compat" ]
+compatibility_flags = ["nodejs_compat"]
 
-# No necesitamos [site] para Cloudflare Pages
-# La configuración del directorio se hace en el dashboard o mediante [pages]
-
+# Directorio de salida del build de Next.js para Pages
+pages_build_output_dir = ".vercel/output/static"
