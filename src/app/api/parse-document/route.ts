@@ -1,7 +1,10 @@
+// Parse Document API Route
+// Compatible con Edge Runtime de Cloudflare
+// NOTA: El soporte para DOCX está deshabilitado en producción (Edge) porque 'mammoth'
+// usa APIs de Node.js incompatibles. Los archivos .docx deben procesarse en el cliente.
 import { NextRequest, NextResponse } from 'next/server';
-import mammoth from 'mammoth';
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
     try {
@@ -15,34 +18,36 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const buffer = Buffer.from(await file.arrayBuffer());
+        const arrayBuffer = await file.arrayBuffer();
         const fileType = file.name.split('.').pop()?.toLowerCase();
 
-        if (fileType === 'docx' || fileType === 'doc') {
-            try {
-                const result = await mammoth.extractRawText({ buffer });
-                return NextResponse.json({ content: result.value.trim() });
-            } catch (docxError: any) {
-                console.error('DOCX parsing error:', docxError);
-                return NextResponse.json(
-                    { error: `Failed to parse DOCX file: ${docxError.message}` },
-                    { status: 500 }
-                );
-            }
-        } else if (['txt', 'md', 'markdown'].includes(fileType || '')) {
-            const text = buffer.toString('utf-8');
+        // En Edge Runtime, solo podemos procesar archivos de texto plano
+        if (['txt', 'md', 'markdown'].includes(fileType || '')) {
+            const decoder = new TextDecoder('utf-8');
+            const text = decoder.decode(arrayBuffer);
             return NextResponse.json({ content: text.trim() });
+        } else if (fileType === 'docx' || fileType === 'doc') {
+            // Mammoth no es compatible con Edge Runtime
+            // El procesamiento de DOCX se hace en el cliente
+            return NextResponse.json(
+                {
+                    error: 'El procesamiento de archivos Word (.docx) se realiza localmente en tu navegador.',
+                    hint: 'Si ves este error, intenta subir el archivo nuevamente.'
+                },
+                { status: 400 }
+            );
         } else {
             return NextResponse.json(
-                { error: 'Unsupported file type. Only DOCX, TXT, and Markdown are supported.' },
+                { error: 'Unsupported file type. Only TXT and Markdown are supported via API.' },
                 { status: 400 }
             );
         }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
         console.error('Document parsing error:', error);
         return NextResponse.json(
-            { error: `Internal server error during parsing: ${error.message}` },
+            { error: `Internal server error during parsing: ${message}` },
             { status: 500 }
         );
     }
