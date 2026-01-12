@@ -2,9 +2,6 @@ name = "chunking-strats-in-action"
 compatibility_date = "2024-04-03"
 compatibility_flags = [ "nodejs_compat" ]
 
-[site]
-bucket = ".vercel/output/static"
+# No necesitamos [site] para Cloudflare Pages
+# La configuración del directorio se hace en el dashboard o mediante [pages]
 
-[vars]
-# Tus variables de entorno también pueden ir aquí, pero es mejor el dashboard por seguridad
-# OPENAI_API_KEY = "sk-..."
