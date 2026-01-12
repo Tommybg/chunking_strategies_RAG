@@ -1,26 +1,458 @@
 @import "tailwindcss";
 
+/* Custom Theme Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Colors */
+  --color-black: #000000;
+  --color-dark-grey: #363946;
+  --color-teal: #3E8989;
+  --color-teal-light: #4FA9A9;
+  --color-teal-dark: #2D6666;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(54, 57, 70, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
+
+  /* Backgrounds */
+  --background: #000000;
+  --foreground: #ffffff;
+
+  /* Brand DNA: Geometric Shadows */
+  --shadow-geometric: 0 8px 30px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-geometric-hover: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-inner-geometric: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-geometric-active: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+
+  /* Brand DNA: Asymmetric Borders */
+  --radius-asymmetric: 0.75rem 1.5rem 0.75rem 1.5rem;
+  --radius-skewed: 0.5rem 1rem 0.5rem 1rem;
+  --radius-3xl: 2rem;
+
+  /* Chunk Highlight Colors */
+  --chunk-1: rgba(62, 137, 137, 0.4);
+  --chunk-2: rgba(79, 169, 169, 0.4);
+  --chunk-3: rgba(45, 102, 102, 0.4);
+  --chunk-4: rgba(100, 180, 180, 0.4);
+  --chunk-5: rgba(30, 80, 80, 0.4);
+
+  /* Book Component */
+  --context-card-border: hsla(0, 0%, 92%, 1);
+  --ds-amber-600: oklch(80.25% 0.1953 73.59);
+  --ds-gray-200: hsla(0, 0%, 92%, 1);
+  --ds-gray-1000: hsla(0, 0%, 9%, 1);
+  --ds-gray-alpha-400: hsla(0, 0%, 0%, 0.08);
+  --ds-background-200: hsla(0, 0%, 98%, 1);
+  --ds-book-bind: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 12%, rgba(255, 255, 255, 0.25) 29.25%, rgba(255, 255, 255, 0) 50.5%, rgba(255, 255, 255, 0) 75.25%, rgba(255, 255, 255, 0.25) 91%, rgba(255, 255, 255, 0)), linear-gradient(90deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.1) 12%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.02) 50%, rgba(0, 0, 0, 0.2) 73.5%, rgba(0, 0, 0, 0.5) 75.25%, rgba(0, 0, 0, 0.15) 85.25%, rgba(0, 0, 0, 0));
+  --ds-shadow-book:
+    0 2px 4px 0 rgba(0, 0, 0, 0.1),
+    0 8px 16px -4px rgba(0, 0, 0, 0.2),
+    0 24px 32px -8px rgba(0, 0, 0, 0.2),
+    inset 2px 0 4px rgba(255, 255, 255, 0.05);
+  /* Added slight inner highlight */
+
+  --ds-shadow-book-border: inset 2px 1px 2px 0 rgba(255, 255, 255, .15);
+}
+
+.book-rotate {
+  transition: transform 500ms cubic-bezier(0.19, 1, 0.22, 1);
+  transform: rotateY(-10deg) rotateX(2deg);
+  /* Initial subtle 3D stance */
+  will-change: transform;
+}
+
+.book-rotate:hover {
+  transform: rotateY(-25deg) rotateX(0deg) scale(1.05) translateX(-12px) translateZ(10px);
+  box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-teal: var(--color-teal);
+  --color-dark-grey: var(--color-dark-grey);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-context-card-border: var(--context-card-border);
+  --color-amber-600: var(--ds-amber-600);
+  --color-gray-200: var(--ds-gray-200);
+  --color-gray-1000: var(--ds-gray-1000);
+  --color-gray-alpha-400: var(--ds-gray-alpha-400);
+  --color-background-200: var(--ds-background-200);
+  --color-book-bind: var(--ds-book-bind);
+  --shadow-book: var(--ds-shadow-book);
+  --shadow-book-border: var(--ds-shadow-book-border);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-asymmetric);
+  box-shadow:
+    var(--shadow-geometric),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Brand DNA: Heavy Glass - Para contenedores principales */
+.glass-heavy {
+  background: rgba(54, 57, 70, 0.7);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-asymmetric);
+  box-shadow:
+    var(--shadow-geometric),
+    var(--shadow-inner-geometric),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Brand DNA: Ghost Glass - Para UI secundaria */
+.glass-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-skewed);
+}
+
+.glass-card {
+  background: rgba(54, 57, 70, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-asymmetric);
+  box-shadow:
+    var(--shadow-geometric),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.glass-panel {
+  background: rgba(54, 57, 70, 0.2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-skewed);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Glow Effects */
+.glow-teal {
+  box-shadow: 0 0 20px rgba(62, 137, 137, 0.3);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(62, 137, 137, 0.5);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(54, 57, 70, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(62, 137, 137, 0.5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(62, 137, 137, 0.7);
+}
+
+/* Chunk Highlighting */
+.chunk-highlight {
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.chunk-highlight:hover {
+  filter: brightness(1.2);
+  cursor: pointer;
+}
+
+.chunk-1 {
+  background: var(--chunk-1);
+  border-left: 3px solid #3E8989;
+}
+
+.chunk-2 {
+  background: var(--chunk-2);
+  border-left: 3px solid #4FA9A9;
+}
+
+.chunk-3 {
+  background: var(--chunk-3);
+  border-left: 3px solid #2D6666;
+}
+
+.chunk-4 {
+  background: var(--chunk-4);
+  border-left: 3px solid #64B4B4;
+}
+
+.chunk-5 {
+  background: var(--chunk-5);
+  border-left: 3px solid #1E5050;
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(62, 137, 137, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(62, 137, 137, 0.5);
+  }
+}
+
+/* Brand DNA: Geometric Float - Para elementos decorativos */
+@keyframes geometric-float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+}
+
+/* Brand DNA: Skew Hover - Inclinación física en hover */
+@keyframes skew-hover {
+  0% {
+    transform: skewX(0deg) skewY(0deg);
+  }
+
+  100% {
+    transform: skewX(-2deg) skewY(1deg);
+  }
+}
+
+/* Brand DNA: Tubelight Pulse - Para tabs activos */
+@keyframes tubelight-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(62, 137, 137, 0.8);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(62, 137, 137, 1), 0 0 30px rgba(62, 137, 137, 0.6);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-geometric-float {
+  animation: geometric-float 6s ease-in-out infinite;
+}
+
+.animate-tubelight {
+  animation: tubelight-pulse 2s ease-in-out infinite;
+}
+
+/* Button Styles */
+.btn-primary {
+  background: linear-gradient(135deg, #3E8989 0%, #2D6666 100%);
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--radius-asymmetric);
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-geometric);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) skewX(-1deg);
+  box-shadow: var(--shadow-geometric-hover);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-geometric-active);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 10px 20px;
+  border-radius: var(--radius-skewed);
+  border: 1px solid var(--glass-border);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-ghost:hover {
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  transform: skewX(-1deg);
+}
+
+/* Brand DNA: Botón Geométrico - Con inclinación física */
+.btn-geometric {
+  background: linear-gradient(135deg, #3E8989 0%, #2D6666 100%);
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--radius-asymmetric);
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-geometric);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-geometric:hover {
+  transform: skewX(-2deg) skewY(1deg) translateY(-2px);
+  box-shadow: var(--shadow-geometric-hover);
+}
+
+.btn-geometric:active {
+  transform: skewX(-1deg) skewY(0.5deg);
+  box-shadow: var(--shadow-inner-geometric);
+}
+
+/* Brand DNA: Rounded Asymmetric Utility */
+.rounded-asymmetric {
+  border-radius: var(--radius-asymmetric);
+}
+
+.rounded-skewed {
+  border-radius: var(--radius-skewed);
+}
+
+/* Input Styles */
+.input-glass {
+  background: rgba(54, 57, 70, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-glass:focus {
+  border-color: #3E8989;
+  box-shadow: 0 0 0 3px rgba(62, 137, 137, 0.2);
+}
+
+.input-glass::placeholder {
+  color: var(--text-muted);
+}
+
+/* Select Styles */
+.select-glass {
+  background: rgba(54, 57, 70, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.select-glass:focus {
+  border-color: #3E8989;
+  box-shadow: 0 0 0 3px rgba(62, 137, 137, 0.2);
+}
+
+.select-glass option {
+  background: #363946;
+  color: white;
+}
+
+.dark {
+  --context-card-border: hsla(0, 0%, 18%, 1);
+  --ds-amber-600: oklch(75.04% 0.1737 74.49);
+  --ds-gray-200: hsla(0, 0%, 12%, 1);
+  --ds-gray-1000: hsla(0, 0%, 93%, 1);
+  --ds-gray-alpha-400: hsla(0, 0%, 100%, 0.14);
+  --ds-background-200: hsla(0, 0%, 0%, 1);
+}
+
+/* Hide Next.js Dev Indicator */
+[data-nextjs-toast],
+div[class*="nextjs-toast"],
+nextjs-portal {
+  display: none !important;
 }

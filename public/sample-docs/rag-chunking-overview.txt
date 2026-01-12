@@ -1,0 +1,110 @@
+# Estrategias de Fragmentación RAG: Una Visión General
+
+La Generación Aumentada por Recuperación (RAG) se ha convertido en un pilar fundamental de las aplicaciones de IA modernas, permitiendo que los modelos de lenguaje accedan a conocimiento externo. En el corazón de cualquier sistema RAG se encuentra un proceso crítico: la fragmentación de texto. Cómo divides tus documentos en piezas más pequeñas impacta dramáticamente la calidad de recuperación y, en última instancia, la utilidad de tu aplicación de IA.
+
+## Introducción a la Fragmentación de Texto
+
+La fragmentación de texto es el proceso de descomponer documentos grandes en piezas más pequeñas y manejables que pueden convertirse en embeddings vectoriales y almacenarse en una base de datos vectorial. El objetivo es crear fragmentos que sean:
+
+- **Semánticamente coherentes**: Cada fragmento debe contener un pensamiento o tema completo
+- **De tamaño apropiado**: Ni muy pequeños (perdiendo contexto) ni muy grandes (diluyendo relevancia)
+- **Recuperables**: Fáciles de relacionar con consultas de usuario durante la búsqueda de similitud
+
+## Las Cinco Estrategias Principales de Fragmentación
+
+### 1. Fragmentación de Tamaño Fijo
+
+El enfoque más simple divide el texto en fragmentos de un conteo predeterminado de caracteres o tokens. Aunque directo, este método a menudo corta a través de oraciones o párrafos, potencialmente rompiendo la coherencia semántica.
+
+**Pros:**
+- Simple de implementar
+- Tamaños de fragmentos predecibles
+- Bajo costo computacional
+
+**Contras:**
+- Puede dividir oraciones o párrafos a mitad de idea
+- No respeta la estructura del documento
+- Puede crear fragmentos semánticamente incompletos
+
+**Mejor para:** Documentos simples donde los límites semánticos no son críticos
+
+### 2. Fragmentación Semántica
+
+Este enfoque inteligente utiliza embeddings para identificar límites semánticos naturales. Al calcular la similitud entre oraciones o párrafos consecutivos, el algoritmo detecta dónde cambian los temas y crea fragmentos en consecuencia.
+
+**Pros:**
+- Preserva la coherencia semántica
+- Respeta los límites naturales de temas
+- Crea fragmentos más significativos para recuperación
+
+**Contras:**
+- Requiere cálculo de embeddings (más lento)
+- Los tamaños de fragmentos pueden variar significativamente
+- Más complejo de implementar
+
+**Mejor para:** Documentos donde preservar el significado es crítico
+
+### 3. Fragmentación Recursiva
+
+Este método jerárquico comienza con separadores grandes (como dobles saltos de línea para párrafos) y aplica recursivamente separadores más pequeños (oraciones, luego palabras) hasta que los fragmentos cumplan los requisitos de tamaño.
+
+**Pros:**
+- Respeta la jerarquía del documento
+- Equilibra coherencia semántica con restricciones de tamaño
+- Maneja bien varios tipos de documentos
+
+**Contras:**
+- Aún puede cortar en puntos arbitrarios si no encuentra separador
+- Requiere ajustar prioridades de separadores
+- Puede producir tamaños de fragmentos desiguales
+
+**Mejor para:** Documentos bien estructurados con saltos de párrafo claros
+
+### 4. Fragmentación Basada en Estructura del Documento
+
+Aprovecha la estructura inherente de los documentos (encabezados, secciones, capítulos) para crear fragmentos semánticamente significativos. Particularmente efectivo para documentación técnica, artículos académicos e informes estructurados.
+
+**Pros:**
+- Respeta perfectamente la organización del documento
+- Crea fragmentos altamente coherentes
+- Mantiene el contexto dentro de secciones
+
+**Contras:**
+- Requiere documentos de entrada estructurados
+- Menos efectivo para texto no estructurado
+- Puede crear fragmentos muy grandes o muy pequeños
+
+**Mejor para:** Documentación técnica, artículos académicos, informes estructurados
+
+### 5. Fragmentación Basada en LLM
+
+El enfoque más sofisticado utiliza un modelo de lenguaje grande para segmentar texto de manera inteligente basándose en comprensión semántica. El LLM identifica puntos de quiebre naturales donde los temas cambian o se introducen nuevos conceptos.
+
+**Pros:**
+- Máxima calidad semántica
+- Comprende contexto y significado
+- Produce fragmentos muy coherentes
+
+**Contras:**
+- Mayor costo computacional
+- Requiere acceso a API (OpenAI, etc.)
+- Tiempo de procesamiento más lento
+
+**Mejor para:** Documentos complejos donde la calidad es primordial
+
+## Elegir la Estrategia Correcta
+
+La estrategia óptima de fragmentación depende de varios factores:
+
+1. **Tipo de Documento**: Texto estructurado vs. no estructurado
+2. **Requisitos de Calidad**: ¿Qué tan crítica es la precisión de recuperación?
+3. **Restricciones de Rendimiento**: Procesamiento en tiempo real vs. por lotes
+4. **Recursos Disponibles**: Acceso a GPU/API para métodos semánticos
+
+## Conclusión
+
+No existe una solución única para la fragmentación de texto en sistemas RAG. El mejor enfoque a menudo implica experimentar con diferentes estrategias y evaluar la calidad de recuperación para tu caso de uso específico. Esta herramienta visualizadora te ayuda a entender cómo funciona cada estrategia y a tomar decisiones informadas para tu pipeline RAG.
+
+---
+
+*Este documento de ejemplo se proporciona para probar el Visualizador de Fragmentación RAG. ¡Siéntete libre de subir tus propios documentos para explorar diferentes estrategias de fragmentación!*

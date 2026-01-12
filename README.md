@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 RAG Chunking Visualizer
 
-## Getting Started
+¡Bienvenido al **RAG Chunking Visualizer**! Esta herramienta premium está diseñada para ayudar a desarrolladores y entusiastas de la IA a entender y comparar cómo diferentes estrategias de fragmentación (chunking) afectan la segmentación de documentos para sistemas de RAG (Retrieval-Augmented Generation).
 
-First, run the development server:
+![Home Page](./public/homepage.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Características
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Visualización en Tiempo Real**: Observa cómo se divide el texto instantáneamente mientras ajustas los parámetros.
+- **Comparación Side-by-Side**: Compara dos estrategias diferentes lado a lado para ver cuál se adapta mejor a tus necesidades.
+- **Múltiples Estrategias**:
+  - **Fixed-Size**: Fragmentos de tamaño constante con superposición ajustable.
+  - **Recursive**: División inteligente basada en separadores naturales (párrafos, oraciones).
+  - **Document Structure**: Respeta la jerarquía del documento (Markdown, secciones).
+  - **Semantic**: Utiliza embeddings para agrupar contenido temáticamente similar.
+  - **LLM-Based**: Refinamiento semántico avanzado potenciado por modelos de lenguaje.
+- **Interfaz Premium**: Diseño moderno con efectos de glassmorphism, animaciones fluidas y una experiencia de usuario excepcional.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![Comparación de Estrategias](./public/comparison_tab.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Cómo empezar
 
-## Learn More
+### Requisitos Previos
 
-To learn more about Next.js, take a look at the following resources:
+- [Bun](https://bun.sh/) (recomendado) o Node.js
+- Una API Key de OpenAI (para las estrategias Semantic y LLM-based)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Instalación
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tu-usuario/chunking-strats-in-action.git
+   cd chunking-strats-in-action
+   ```
 
-## Deploy on Vercel
+2. Instala las dependencias:
+   ```bash
+   bun install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Configura las variables de entorno:
+   Crea un archivo `.env` en la raíz con tu API Key:
+   ```env
+   NEXT_PUBLIC_OPENAI_API_KEY=tu_api_key_aqui
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Inicia el servidor de desarrollo:
+   ```bash
+   bun run dev
+   ```
+
+5. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+## 📖 Referencias y Aprendizaje
+
+Este proyecto fue inspirado y utiliza conceptos detallados en **Daily Dose of DS**. Si quieres profundizar en las matemáticas y la lógica detrás de estas estrategias, te recomendamos encarecidamente este recurso:
+
+[![Daily Dose of DS Reference](./public/reference-chunking-strategies.webp)](https://www.dailydoseofds.com/)
+
+*Haz clic en la imagen superior para visitar el artículo original y aprender más sobre estrategias de segmentación.*
+
+---
+
+Desarrollado con ♥️ por [Tommy BG](https://github.com/tommygoat)
