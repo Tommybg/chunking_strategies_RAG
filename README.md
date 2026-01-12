@@ -41,7 +41,7 @@
 3. Configura las variables de entorno:
    Crea un archivo `.env` en la raíz con tu API Key:
    ```env
-   NEXT_PUBLIC_OPENAI_API_KEY=tu_api_key_aqui
+   OPENAI_API_KEY=tu_api_key_aqui
    ```
 
 4. Inicia el servidor de desarrollo:
