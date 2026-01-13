@@ -3,13 +3,13 @@ import OpenAI from 'openai';
 
 export const runtime = 'edge';
 
-// Esta API route usa la key del servidor - los usuarios no necesitan proveer la suya
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(request: NextRequest) {
     try {
+        // Inicializar OpenAI DENTRO de la función para que el secret esté disponible en Workers
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY,
+        });
+
         const body = await request.json();
         const { text, targetChunks = 10, model = 'gpt-4o-mini' } = body;
 

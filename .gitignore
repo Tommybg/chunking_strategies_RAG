@@ -50,3 +50,4 @@ Claude/
 # local markdown files
 *.md
 !README.md
+!docs/*.md

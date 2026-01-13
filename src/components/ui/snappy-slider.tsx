@@ -268,7 +268,7 @@ const SnappySlider = React.forwardRef<HTMLDivElement, CustomSliderProps>(
                 </SnappySliderHeader>
                 <div className="relative h-[--mark-slider-height]">
                     <div ref={sliderRef} className="absolute inset-0 cursor-pointer">
-                        <div className="absolute top-1/2 -translate-y-1/2 w-full h-[--mark-slider-track-height] bg-[#3E8989]/20 rounded-sm">
+                        <div className="absolute top-1/2 -translate-y-1/2 w-full h-[--mark-slider-track-height] bg-[#3E8989]/20 rounded-sm overflow-hidden">
                             {/* Progress overlay */}
                             <div
                                 className="absolute top-0 h-full z-[1] bg-[#3E8989]"
